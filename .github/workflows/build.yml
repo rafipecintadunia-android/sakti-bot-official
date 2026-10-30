@@ -9,6 +9,10 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
+      - name: Fix old Gradle project
+        run: |
+          rm -rf android
+          flutter create . --platforms=android --org com.sakti.bot --project-name sakti_bot_official
       - run: flutter pub get
       - run: flutter build apk --release --no-tree-shake-icons
       - uses: actions/upload-artifact@v4
