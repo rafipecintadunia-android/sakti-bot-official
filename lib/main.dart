@@ -1,47 +1,27 @@
 import 'package:flutter/material.dart';
-void main()=>runApp(const MaterialApp(debugShowCheckedModeBanner:false,home:SaktiBot()));
-class SaktiBot extends StatefulWidget{const SaktiBot({super.key});@override State<SaktiBot> createState()=>_SaktiBotState();}
-class _SaktiBotState extends State<SaktiBot>{
-bool musik=true,sound=true,ping=true,speak=false;
-bool sortir=true,sortNo=false,sortSkip=true,upSet=false;
-bool perKm1=false,perKm2=false,tolak=false;
-TextEditingController harga=TextEditingController(text:"1500");
-@override Widget build(BuildContext context){
-return Scaffold(backgroundColor:const Color(0xFF0F3A5C),
-appBar:AppBar(backgroundColor:const Color(0xFF0F3A5C),elevation:0,title:Column(crossAxisAlignment:CrossAxisAlignment.start,children:const[Text("SAKTI BOT OFFICIAL",style:TextStyle(fontWeight:FontWeight.bold)),Text("New Version",style:TextStyle(color:Colors.yellow,fontSize:14))]),actions:[Container(margin:const EdgeInsets.all(12),padding:const EdgeInsets.symmetric(horizontal:20),decoration:BoxDecoration(color:const Color(0xFF4A0E0E),borderRadius:BorderRadius.circular(20),border:Border.all(color:Colors.white)),child:const Center(child:Text("GROUP",style:TextStyle(fontWeight:FontWeight.bold))))]),
-body:SingleChildScrollView(padding:const EdgeInsets.all(12),child:Column(children:[
-Container(width:90,height:90,decoration:BoxDecoration(shape:BoxShape.circle,border:Border.all(color:Colors.white,width:2),color:Colors.black),child:const Center(child:Text("SAKTI\nMOD",textAlign:TextAlign.center,style:TextStyle(color:Colors.white,fontWeight:FontWeight.bold)))),
-const SizedBox(height:8),const Text("Jumat | 30 Okt 2026 | 23:20:11",style:TextStyle(color:Colors.yellow,fontWeight:FontWeight.bold,fontSize:12)),
-const SizedBox(height:8),const Text("TAMPILAN MODE PROFESIONAL",style:TextStyle(color:Colors.yellow,fontWeight:FontWeight.bold,fontSize:16)),
-const SizedBox(height:12),
-Row(mainAxisAlignment:MainAxisAlignment.spaceEvenly,children:[_btn("BAHASA"),_btn("INFO"),_btn("MODE SIMPEL")]),
-const SizedBox(height:16),
-_box("BACKSOUND | NOTIFICATION",[
-_row("Musik Latar Belakang",musik,(v)=>setState(()=>musik=v)),
-_row("Sound Notification",sound,(v)=>setState(()=>sound=v)),
-_row("Auto Ping Network",ping,(v)=>setState(()=>ping=v)),
-_row("Notification Speak",speak,(v)=>setState(()=>speak=v)),
-]),
-_box("AUTOBID POP UP OPTIONS",[
-_row("Autobid Sortir ( Khusus Kurir )",sortir,(v)=>setState(()=>sortir=v)),
-_row("Autobid Sortir Price No Skip",sortNo,(v)=>setState(()=>sortNo=v)),
-_row("Autobid Sortir Price ( Skip Jika Tidak Sesuai)",sortSkip,(v)=>setState(()=>sortSkip=v)),
-_row("Autobid UpPrice Settings ( Motor | Mobil | Kurir )",upSet,(v)=>setState(()=>upSet=v)),
-]),
-_box("AUTOBID POP UP | UP PRICE PERKM",[
-_row("Autobid PerKm ( Order Info Original )",perKm1,(v)=>setState(()=>perKm1=v)),
-_row("Autobid perKm ( Order Info V2 )",perKm2,(v)=>setState(()=>perKm2=v)),
-_row("Tolak pesanan dengan deskripsi",tolak,(v)=>setState(()=>tolak=v)),
-const SizedBox(height:12),
-const Text("Harga PerKm",style:TextStyle(color:Colors.yellow,fontWeight:FontWeight.bold)),
-const SizedBox(height:6),
-Container(color:Colors.white,padding:const EdgeInsets.symmetric(horizontal:12),child:TextField(controller:harga,textAlign:TextAlign.center,style:const TextStyle(color:Colors.black,fontWeight:FontWeight.bold),decoration:const InputDecoration(border:InputBorder.none))),
-]),
-const SizedBox(height:10),
-Container(width:double.infinity,color:const Color(0xFF2A2A2A),padding:const EdgeInsets.all(8),child:RichText(text:const TextSpan(children:[TextSpan(text:"SAKTI BOT OFFICIAL ",style:TextStyle(color:Colors.orange,fontWeight:FontWeight.bold)),TextSpan(text:"saat ini Kamu berada di: ",style:TextStyle(color:Colors.white)),TextSpan(text:"Kecamatan Krem",style:TextStyle(color:Colors.cyan,fontWeight:FontWeight.bold))]))),
-])));
+import 'dart:async';
+void main()=>runApp(MaterialApp(debugShowCheckedModeBanner:false,home:Login()));
+class Login extends StatelessWidget{
+  @override Widget build(c)=>Scaffold(backgroundColor:Color(0xFF1A3A4F),body:Center(child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[
+    Icon(Icons.shield,size:80,color:Colors.amber),Text('SAKTI BOT OFFICIAL',style:TextStyle(color:Colors.white,fontWeight:FontWeight.bold,fontSize:20)),
+    SizedBox(height:30),SizedBox(width:300,child:TextField(decoration:InputDecoration(labelText:'Nomor HP',filled:true,fillColor:Color(0xFF2C4A5F),border:OutlineInputBorder(borderRadius:BorderRadius.circular(12))))),
+    SizedBox(height:12),SizedBox(width:300,child:TextField(obscureText:true,decoration:InputDecoration(labelText:'Sandi',filled:true,fillColor:Color(0xFF2C4A5F),border:OutlineInputBorder(borderRadius:BorderRadius.circular(12))))),
+    SizedBox(height:20),ElevatedButton(style:ElevatedButton.styleFrom(backgroundColor:Color(0xFF7A2A1A),minimumSize:Size(300,50)),onPressed:()=>Navigator.pushReplacement(c,MaterialPageRoute(builder:(_)=>Home())),child:Text('LOGIN - MASUK'))
+  ]))));
 }
-Widget _btn(String t)=>Container(padding:const EdgeInsets.symmetric(horizontal:18,vertical:8),decoration:BoxDecoration(color:const Color(0xFF4A0E0E),borderRadius:BorderRadius.circular(20),border:Border.all(color:Colors.white)),child:Text(t,style:const TextStyle(color:Colors.white,fontWeight:FontWeight.bold,fontSize:12)));
-Widget _box(String title,List<Widget> childs)=>Container(margin:const EdgeInsets.only(bottom:14),padding:const EdgeInsets.all(12),decoration:BoxDecoration(color:const Color(0xFF5A1A0F),borderRadius:BorderRadius.circular(16),border:Border.all(color:Colors.white38)),child:Column(children:[Text(title,style:const TextStyle(color:Colors.yellow,fontWeight:FontWeight.bold,fontSize:14)),const SizedBox(height:12),...childs]));
-Widget _row(String txt,bool val,Function(bool) on){return Padding(padding:const EdgeInsets.only(bottom:8),child:Row(children:[Container(width:24,height:24,decoration:BoxDecoration(shape:BoxShape.circle,color:Colors.white),child:const Center(child:Text("?",style:TextStyle(fontWeight:FontWeight.bold,fontSize:12)))),const SizedBox(width:8),Expanded(child:Text(txt,style:const TextStyle(color:Colors.white,fontSize:12))),Switch(value:val,onChanged:on,activeColor:Colors.blue)]));}
+class Home extends StatefulWidget{ @override _HomeState createState()=>_HomeState(); }
+class _HomeState extends State<Home>{
+  double harga=1500,speed=87; late Timer t;
+  @override void initState(){super.initState(); t=Timer.periodic(Duration(milliseconds:400),(_){setState(()=>speed=65+(DateTime.now().millisecond%35));});}
+  @override void dispose(){t.cancel(); super.dispose();}
+  Widget card(String j,List<String> isi)=>Container(margin:EdgeInsets.only(bottom:12),padding:EdgeInsets.all(12),decoration:BoxDecoration(color:Color(0xFF6B2E1F),borderRadius:BorderRadius.circular(16)),child:Column(children:[Text(j,style:TextStyle(color:Colors.yellowAccent,fontWeight:FontWeight.bold)),SizedBox(height:8),...isi.map((e)=>Row(children:[CircleAvatar(radius:10,child:Text('?',style:TextStyle(fontSize:8))),SizedBox(width:8),Expanded(child:Text(e,style:TextStyle(color:Colors.white,fontSize:12))),Switch(value:true,activeColor:Colors.blue,onChanged:(_){})])).toList()]));
+  @override Widget build(c)=>Scaffold(backgroundColor:Color(0xFF1A3A4F),appBar:AppBar(backgroundColor:Color(0xFF1A3A4F),title:Text('SAKTI BOT OFFICIAL - New Version')),body:Stack(children:[
+    ListView(padding:EdgeInsets.fromLTRB(12,12,12,80),children:[
+      card('BACKSOUND & NOTIFICATION',['Sound Notification (Lagu 1)','Auto Ping Network','Notification Speak']),
+      card('AUTOBID POP UP OPTIONS',['Autobid Sortir (Khusus Kurir)','Autobid Sortir Price No Skip','Autobid Sortir Price (Skip)','Autobid UpPrice Settings']),
+      card('AUTOBID POP UP | UP PRICE PERKM',['Autobid PerKm Original','Autobid perKm V2','Tolak pesanan dengan deskripsi']),
+      Container(padding:EdgeInsets.all(12),decoration:BoxDecoration(color:Color(0xFF6B2E1F),borderRadius:BorderRadius.circular(12)),child:Column(children:[Text('Minimal Rating: 1.0 | Harga PerKm 1500',style:TextStyle(color:Colors.amber,fontSize:11)),Slider(value:harga,min:500,max:5000,onChanged:(v)=>setState(()=>harga=v))]))
+    ]),
+    Positioned(left:12,top:20,child:Container(padding:EdgeInsets.all(10),decoration:BoxDecoration(color:Colors.black87,borderRadius:BorderRadius.circular(12)),child:Column(children:[Icon(Icons.shield,color:Colors.orange),Text('Speed: ${speed.toInt()} ms',style:TextStyle(color:Colors.amber,fontSize:11,fontWeight:FontWeight.bold)),Container(padding:EdgeInsets.symmetric(horizontal:8),decoration:BoxDecoration(border:Border.all(color:Colors.white),borderRadius:BorderRadius.circular(10)),child:Text('AUTO',style:TextStyle(color:Colors.greenAccent,fontSize:10)))])))
+  ]));
 }
