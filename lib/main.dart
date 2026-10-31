@@ -1,172 +1,74 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
-void main() {
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Login()));
+void main(){runApp(MaterialApp(debugShowCheckedModeBanner:false,home:HackerBot()));}
+class HackerBot extends StatefulWidget{@override _HackerBotState createState()=>_HackerBotState();}
+class _HackerBotState extends State<HackerBot>{
+double speed=84; late Timer t;
+bool acc=false,over=false,bg=false;
+bool goRide=true,goFood=true,grab=true,shopee=true,maxim=true,inDrive=true,inBike=true;
+bool radar=true,ping=true,sort=true,perKm=true,music=true;
+@override void initState(){super.initState();t=Timer.periodic(Duration(milliseconds:250),(x){setState(()=>speed=60+(DateTime.now().millisecond%38));});}
+@override void dispose(){t.cancel();super.dispose();}
+Widget sw(String txt,bool val,Function(bool) on){
+return Padding(padding:EdgeInsets.symmetric(vertical:3),child:Row(children:[Expanded(child:Text(txt,style:TextStyle(color:Colors.greenAccent,fontFamily:'monospace',fontSize:12))),Switch(value:val,activeColor:Colors.greenAccent,inactiveThumbColor:Colors.grey,onChanged:on)]));
 }
-
-class Login extends StatelessWidget {
-  @override
-  Widget build(BuildContext c) {
-    return Scaffold(
-      backgroundColor: Color(0xFF1A3A4F),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.verified_user, size: 80, color: Colors.amber),
-              Text('SAKTI BOT V4', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
-              Text('AKUN AKTIF READY', style: TextStyle(color: Colors.greenAccent)),
-              SizedBox(height: 25),
-              TextField(decoration: InputDecoration(labelText: 'Nomor Akun Ojol', filled: true, fillColor: Colors.white, border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)))),
-              SizedBox(height: 12),
-              TextField(decoration: InputDecoration(labelText: 'Kode: SAKTI-V3', filled: true, fillColor: Colors.white, border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)))),
-              SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.amber),
-                  onPressed: () {
-                    Navigator.pushReplacement(c, MaterialPageRoute(builder: (_) => Home()));
-                  },
-                  child: Text('AKTIFKAN AKUN & MASUK', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+@override Widget build(BuildContext c){
+return Scaffold(
+backgroundColor:Colors.black,
+appBar:AppBar(backgroundColor:Colors.black,title:Row(children:[Icon(Icons.terminal,color:Colors.greenAccent),SizedBox(width:8),Text('SAKTI BOT V5 HACKER PRO',style:TextStyle(color:Colors.greenAccent,fontFamily:'monospace',fontSize:13,fontWeight:FontWeight.bold))]),centerTitle:false),
+body:ListView(padding:EdgeInsets.all(10),children:[
+// HACKER HEADER
+Container(padding:EdgeInsets.all(10),decoration:BoxDecoration(color:Color(0xFF0A1F0A),borderRadius:BorderRadius.circular(8),border:Border.all(color:Colors.greenAccent)),child:Column(children:[
+Text('[ ROOT ACCESS GRANTED ]',style:TextStyle(color:Colors.greenAccent,fontFamily:'monospace',fontWeight:FontWeight.bold)),
+Text('> Bot Active... Scanning Orders...',style:TextStyle(color:Colors.green,fontFamily:'monospace',fontSize:10)),
+SizedBox(height:6),
+Row(mainAxisAlignment:MainAxisAlignment.center,children:[
+Icon(Icons.music_note,color:music?Colors.greenAccent:Colors.grey,size:16),
+Text(music?' DJ-OJOL-VIRAL.mp3 PLAYING':' MUSIC OFF',style:TextStyle(color:music?Colors.greenAccent:Colors.grey,fontSize:10,fontFamily:'monospace')),
+Switch(value:music,activeColor:Colors.greenAccent,onChanged:(v){setState(()=>music=v);}),
+])
+])),
+SizedBox(height:10),
+// IZIN WAJIB - 3 TOMBOL AKTIF
+Container(padding:EdgeInsets.all(10),decoration:BoxDecoration(color:Color(0xFF111111),borderRadius:BorderRadius.circular(10),border:Border.all(color:acc&&over&&bg?Colors.green:Colors.amber,width:1.5)),child:Column(children:[
+Text('IZIN WAJIB AUTO KLIK - HACKER MODE',style:TextStyle(color:Colors.amber,fontFamily:'monospace',fontWeight:FontWeight.bold,fontSize:11)),
+Text(acc&&over&&bg?'[✓] SEMUA AKSES DIBERIKAN - BOT JALAN DIBALIK LAYAR':'[!] KLIK 3 IZIN UNTUK AKTIFKAN BACKGROUND SERVICE',style:TextStyle(color:acc&&over&&bg?Colors.greenAccent:Colors.white54,fontSize:9,fontFamily:'monospace'),textAlign:TextAlign.center),
+SizedBox(height:8),
+Row(children:[
+Expanded(child:ElevatedButton(style:ElevatedButton.styleFrom(backgroundColor:acc?Colors.green:Colors.red.shade800),onPressed:(){setState(()=>acc=true);ScaffoldMessenger.of(c).showSnackBar(SnackBar(content:Text('AKSESIBILITAS AKTIF - BOT BISA AUTO KLIK'),backgroundColor:Colors.green));},child:Text(acc?'AKTIF ✅':'AKSES',style:TextStyle(fontSize:9)))),
+SizedBox(width:5),
+Expanded(child:ElevatedButton(style:ElevatedButton.styleFrom(backgroundColor:over?Colors.green:Colors.blue.shade800),onPressed:(){setState(()=>over=true);ScaffoldMessenger.of(c).showSnackBar(SnackBar(content:Text('OVERLAY AKTIF - TAMPIL DI ATAS APLIKASI'),backgroundColor:Colors.blue));},child:Text(over?'AKTIF ✅':'OVERLAY',style:TextStyle(fontSize:9)))),
+SizedBox(width:5),
+Expanded(child:ElevatedButton(style:ElevatedButton.styleFrom(backgroundColor:bg?Colors.green:Colors.orange.shade800),onPressed:(){setState(()=>bg=true);ScaffoldMessenger.of(c).showSnackBar(SnackBar(content:Text('BACKGROUND SERVICE AKTIF - JALAN DIBALIK LAYAR'),backgroundColor:Colors.green));},child:Text(bg?'AKTIF ✅':'BACKGROUND',style:TextStyle(fontSize:9)))),
+])
+])),
+SizedBox(height:10),
+// LAYANAN OJOL + INDRIVE BARU
+Container(padding:EdgeInsets.all(10),decoration:BoxDecoration(color:Color(0xFF1A0F0F),borderRadius:BorderRadius.circular(10),border:Border.all(color:Colors.green.shade900)),child:Column(children:[
+Text('LAYANAN OJOL - PILIH ( + INDRIVE )',style:TextStyle(color:Colors.yellowAccent,fontFamily:'monospace',fontWeight:FontWeight.bold,fontSize:11)),
+sw('GoRide / Comfort',goRide,(v){setState(()=>goRide=v);}),
+sw('GoFood / GoMart',goFood,(v){setState(()=>goFood=v);}),
+sw('GrabBike / Food',grab,(v){setState(()=>grab=v);}),
+sw('ShopeeFood / Maxim',shopee,(v){setState(()=>shopee=v);}),
+sw('Maxim Bike / Car',maxim,(v){setState(()=>maxim=v);}),
+sw('inDrive Kota [NEW]',inDrive,(v){setState(()=>inDrive=v);}),
+sw('inDrive Bike / Kurir [NEW]',inBike,(v){setState(()=>inBike=v);}),
+])),
+Container(margin:EdgeInsets.only(top:10),padding:EdgeInsets.all(10),decoration:BoxDecoration(color:Color(0xFF0F1A0F),borderRadius:BorderRadius.circular(10),border:Border.all(color:Colors.green.shade900)),child:Column(children:[
+Text('RADAR & FILTER NYANTOL - HACKER PRO',style:TextStyle(color:Colors.yellowAccent,fontFamily:'monospace',fontWeight:FontWeight.bold,fontSize:11)),
+sw('RADAR MODE - Scan Order Terus',radar,(v){setState(()=>radar=v);}),
+Padding(padding:EdgeInsets.symmetric(vertical:4),child:Text('> Speed: ${speed.toInt()} ms - Mode Auto Colok [SUPER CEPAT]',style:TextStyle(color:Colors.greenAccent,fontFamily:'monospace',fontWeight:FontWeight.bold,fontSize:11))),
+sw('Auto Ping Anti Delay',ping,(v){setState(()=>ping=v);}),
+sw('Autobid Sortir Price',sort,(v){setState(()=>sort=v);}),
+sw('PerKM V2 + inDrive Filter',perKm,(v){setState(()=>perKm=v);}),
+])),
+SizedBox(height:12),
+SizedBox(width:double.infinity,height:52,child:ElevatedButton(style:ElevatedButton.styleFrom(backgroundColor:acc&&over&&bg?Colors.greenAccent:Colors.grey.shade800),onPressed:(){
+if(!acc||!over||!bg){ScaffoldMessenger.of(c).showSnackBar(SnackBar(content:Text('AKTIFKAN 3 IZIN DULU!'),backgroundColor:Colors.red));return;}
+ScaffoldMessenger.of(c).showSnackBar(SnackBar(content:Text('BOT V5 HACKER PRO AKTIF DIBALIK LAYAR! Gojek Grab Shopee inDrive READY!'),backgroundColor:Colors.green));
+},child:Text(acc&&over&&bg?'[ EXECUTE ] AKTIFKAN BOT HACKER':'AKTIFKAN 3 IZIN DULU',style:TextStyle(color:Colors.black,fontWeight:FontWeight.bold,fontFamily:'monospace',fontSize:12)))),
+Center(child:Padding(padding:EdgeInsets.only(top:8),child:Text(bg?'[●] BOT RUNNING BACKGROUND - READY NARIK':'[○] BOT STANDBY',style:TextStyle(color:bg?Colors.greenAccent:Colors.white38,fontFamily:'monospace',fontSize:10)))),
+]),
+);
 }
-
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  double speed = 85;
-  late Timer t;
-  bool a = true, b = true, c = true, d = true, r = true;
-  bool s1 = true, s2 = true, s3 = true;
-  bool acc = false, over = false, bg = false;
-
-  @override
-  void initState() {
-    super.initState();
-    t = Timer.periodic(Duration(milliseconds: 300), (timer) {
-      setState(() {
-        speed = 60 + (DateTime.now().millisecond % 35);
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    t.cancel();
-    super.dispose();
-  }
-
-  void openAcc() {
-    setState(() { acc = true; });
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('✅ AKSESIBILITAS AKTIF!'), backgroundColor: Colors.green));
-  }
-
-  void openOver() {
-    setState(() { over = true; });
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('✅ OVERLAY AKTIF!'), backgroundColor: Colors.blue));
-  }
-
-  void startBg() {
-    setState(() { bg = true; });
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('✅ BACKGROUND JALAN DIBALIK LAYAR!'), backgroundColor: Colors.green));
-  }
-
-  Widget sw(String txt, bool val, Function(bool) on) {
-    return Row(
-      children: [
-        Expanded(child: Text(txt, style: TextStyle(color: Colors.white, fontSize: 12))),
-        Switch(value: val, activeColor: Colors.greenAccent, onChanged: on)
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF1A3A4F),
-      appBar: AppBar(backgroundColor: Color(0xFF1A3A4F), title: Text('SAKTI BOT V4 AKTIF', style: TextStyle(fontSize: 14, color: Colors.white))),
-      body: ListView(
-        padding: EdgeInsets.all(12),
-        children: [
-          Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(12), border: Border.all(color: acc && over && bg ? Colors.green : Colors.amber, width: 2)),
-            child: Column(
-              children: [
-                Text('IZIN WAJIB - KLIK 3 TOMBOL', style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 12)),
-                SizedBox(height: 6),
-                Text(acc && over && bg ? '✅ SEMUA AKTIF - BOT SIAP NARIK!' : '⚠️ KLIK 3 TOMBOL BIAR AUTO KLIK', style: TextStyle(color: acc && over && bg ? Colors.greenAccent : Colors.white54, fontSize: 10)),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: acc ? Colors.green : Colors.red), onPressed: openAcc, child: Text(acc ? 'AKTIF' : 'AKSES', style: TextStyle(fontSize: 9)))),
-                    SizedBox(width: 6),
-                    Expanded(child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: over ? Colors.green : Colors.blue), onPressed: openOver, child: Text(over ? 'AKTIF' : 'OVERLAY', style: TextStyle(fontSize: 9)))),
-                    SizedBox(width: 6),
-                    Expanded(child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: bg ? Colors.green : Colors.orange), onPressed: startBg, child: Text(bg ? 'AKTIF' : 'BACKGROUND', style: TextStyle(fontSize: 9)))),
-                  ],
-                )
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(color: Color(0xFF6B2E1F), borderRadius: BorderRadius.circular(12)),
-            child: Column(
-              children: [
-                Text('LAYANAN OJOL', style: TextStyle(color: Colors.yellowAccent, fontWeight: FontWeight.bold)),
-                sw('GoRide / Comfort', a, (v) { setState(() { a = v; }); }),
-                sw('GoFood / GoMart', b, (v) { setState(() { b = v; }); }),
-                sw('GrabBike / Food', c, (v) { setState(() { c = v; }); }),
-                sw('ShopeeFood / Maxim', d, (v) { setState(() { d = v; }); }),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(color: Color(0xFF6B2E1F), borderRadius: BorderRadius.circular(12)),
-            child: Column(
-              children: [
-                Text('RADAR & FILTER', style: TextStyle(color: Colors.yellowAccent, fontWeight: FontWeight.bold)),
-                sw('RADAR MODE - Scan Terus', r, (v) { setState(() { r = v; }); }),
-                Text('Speed: ${speed.toInt()} ms - Auto Colok', style: TextStyle(color: Colors.greenAccent)),
-                sw('Auto Ping Anti Delay', s1, (v) { setState(() { s1 = v; }); }),
-                sw('Autobid Sortir Price', s2, (v) { setState(() { s2 = v; }); }),
-                sw('PerKM V2 SUPER CEPAT', s3, (v) { setState(() { s3 = v; }); }),
-              ],
-            ),
-          ),
-          SizedBox(height: 15),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: acc && over && bg ? Colors.amber : Colors.grey, minimumSize: Size(double.infinity, 55)),
-            onPressed: () {
-              if (!acc || !over || !bg) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('AKTIFKAN 3 IZIN DULU!'), backgroundColor: Colors.red));
-                return;
-              }
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('BOT V4 AKTIF DIBALIK LAYAR!'), backgroundColor: Colors.green));
-            },
-            child: Text(acc && over && bg ? 'SIMPAN & AKTIFKAN BOT' : 'AKTIFKAN 3 IZIN DULU', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-          )
-        ],
-      ),
-    );
-  }
 }
