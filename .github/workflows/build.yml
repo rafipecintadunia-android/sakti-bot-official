@@ -15,6 +15,55 @@ jobs:
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
+      - name: Create Android folder if missing
+        run: |
+          if [ ! -d "android" ]; then
+            flutter create --platforms=android .
+          fi
+      - name: Inject Sakti Accessibility Service
+        run: |
+          mkdir -p android/app/src/main/kotlin/com/example/sakti_bot
+          mkdir -p android/app/src/main/res/xml
+          cat > android/app/src/main/kotlin/com/example/sakti_bot/SaktiAccessibilityService.kt << 'EOF'
+          package com.example.sakti_bot
+          import android.accessibilityservice.AccessibilityService
+          import android.view.accessibility.AccessibilityEvent
+          import android.view.accessibility.AccessibilityNodeInfo
+          class SaktiAccessibilityService : AccessibilityService() {
+              override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+                  if (event?.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED || event?.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+                      val root = rootInActiveWindow ?: return
+                      autoClick(root, "TERIMA")
+                      autoClick(root, "TERIMA ORDER")
+                      autoClick(root, "Terima")
+                  }
+              }
+              override fun onInterrupt() {}
+              private fun autoClick(node: AccessibilityNodeInfo, text: String) {
+                  try {
+                      val list = node.findAccessibilityNodeInfosByText(text)
+                      for (item in list) {
+                          if (item.isClickable) item.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+                          else {
+                              var parent = item.parent
+                              while (parent != null) {
+                                  if (parent.isClickable) { parent.performAction(AccessibilityNodeInfo.ACTION_CLICK); break }
+                                  parent = parent.parent
+                              }
+                          }
+                      }
+                  } catch (e: Exception) {}
+              }
+          }
+          EOF
+          cat > android/app/src/main/res/xml/accessibility_service_config.xml << 'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+              android:accessibilityEventTypes="typeAllMask"
+              android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows"
+              android:canRetrieveWindowContent="true"
+              android:description="@android:string/ok" />
+          EOF
       - run: flutter pub get
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
