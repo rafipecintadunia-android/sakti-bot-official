@@ -7,52 +7,45 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          flutter-version: '3.24.3'
           channel: 'stable'
-      - name: Create Android folder if missing
+      - name: Recreate Android folder
         run: |
+          ls -la
+          cat pubspec.yaml
           if [ ! -d "android" ]; then
-            flutter create --platforms=android .
+            flutter create --platforms=android --org com.example.sakti_bot .
           fi
-      - name: Inject Sakti Accessibility Service
+          ls -la android/app/src/main/kotlin/ || true
+      - name: Patch Manifest + Inject Service
         run: |
-          mkdir -p android/app/src/main/kotlin/com/example/sakti_bot
+          PKG_PATH=$(find android/app/src/main/kotlin -type d -name "sakti_bot*" | head -1)
+          if [ -z "$PKG_PATH" ]; then PKG_PATH="android/app/src/main/kotlin/com/example/sakti_bot"; fi
+          echo "PKG_PATH=$PKG_PATH"
+          mkdir -p "$PKG_PATH"
           mkdir -p android/app/src/main/res/xml
-          cat > android/app/src/main/kotlin/com/example/sakti_bot/SaktiAccessibilityService.kt << 'EOF'
+          cat > "$PKG_PATH/SaktiAccessibilityService.kt" << 'EOF'
           package com.example.sakti_bot
           import android.accessibilityservice.AccessibilityService
           import android.view.accessibility.AccessibilityEvent
           import android.view.accessibility.AccessibilityNodeInfo
           class SaktiAccessibilityService : AccessibilityService() {
               override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-                  if (event?.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED || event?.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-                      val root = rootInActiveWindow ?: return
-                      autoClick(root, "TERIMA")
-                      autoClick(root, "TERIMA ORDER")
-                      autoClick(root, "Terima")
-                  }
+                  val root = rootInActiveWindow ?: return
+                  autoClick(root, "TERIMA")
               }
               override fun onInterrupt() {}
-              private fun autoClick(node: AccessibilityNodeInfo, text: String) {
-                  try {
+              fun autoClick(node: AccessibilityNodeInfo, text: String){
+                  try{
                       val list = node.findAccessibilityNodeInfosByText(text)
-                      for (item in list) {
-                          if (item.isClickable) item.performAction(AccessibilityNodeInfo.ACTION_CLICK)
-                          else {
-                              var parent = item.parent
-                              while (parent != null) {
-                                  if (parent.isClickable) { parent.performAction(AccessibilityNodeInfo.ACTION_CLICK); break }
-                                  parent = parent.parent
-                              }
-                          }
-                      }
-                  } catch (e: Exception) {}
+                      for (n in list){ if (n.isClickable) n.performAction(16) }
+                  }catch(e: Exception){}
               }
           }
           EOF
@@ -61,12 +54,20 @@ jobs:
           <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
               android:accessibilityEventTypes="typeAllMask"
               android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows"
-              android:canRetrieveWindowContent="true"
-              android:description="@android:string/ok" />
+              android:canRetrieveWindowContent="true" />
           EOF
-      - run: flutter pub get
-      - run: flutter build apk --release
+          # Tambah service ke AndroidManifest
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          if ! grep -q "SaktiAccessibilityService" "$MANIFEST"; then
+            sed -i '/<\/application>/i \
+                  <service android:name=".SaktiAccessibilityService" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" android:exported="true"> <intent-filter><action android:name="android.accessibilityservice.AccessibilityService" /></intent-filter> <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessibility_service_config" /> </service>' "$MANIFEST"
+          fi
+          cat "$MANIFEST"
+      - name: Build APK
+        run: |
+          flutter pub get
+          flutter build apk --debug
       - uses: actions/upload-artifact@v4
         with:
-          name: sakti-bot-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: sakti-bot-apk-debug
+          path: build/app/outputs/flutter-apk/app-debug.apk
