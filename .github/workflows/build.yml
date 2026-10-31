@@ -1,4 +1,4 @@
-name: Build SAKTI BOT APK
+   name: Build SAKTI BOT APK
 on: [push]
 jobs:
   build:
@@ -14,7 +14,7 @@ jobs:
           flutter-version: '3.22.0'
       - name: Create Android Project
         run: |
-          flutter create . --platforms=android --project-name sakti_bot_official --org com.example
+          flutter create . --platforms=android --project-name sakti_bot_official
           mkdir -p android/app/src/main/res/xml
       - name: Inject V7 Native Files
         run: |
@@ -27,61 +27,42 @@ jobs:
           import io.flutter.embedding.engine.FlutterEngine
           import io.flutter.plugin.common.MethodChannel
           class MainActivity: FlutterActivity() {
-              private val CHANNEL = "sakti.bot/access"
-              override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-                  super.configureFlutterEngine(flutterEngine)
-                  MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
-                      if (call.method == "openAccessibility") {
-                          try { startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)); result.success(true) } catch(e:Exception){ result.error("ERR","","") }
-                      } else if (call.method == "openOverlay") {
-                          try { val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")); startActivity(intent); result.success(true) } catch(e:Exception){ result.error("ERR","","") }
-                      } else { result.notImplemented() }
-                  }
+            private val CHANNEL = "sakti.bot/access"
+            override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+              super.configureFlutterEngine(flutterEngine)
+              MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
+                if (call.method == "openAccessibility") {
+                  try { startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)); result.success(true) } catch(e:Exception){ result.error("ERR","","") }
+                } else if (call.method == "openOverlay") {
+                  try { val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")); startActivity(intent); result.success(true) } catch(e:Exception){ result.error("ERR","","") }
+                } else { result.notImplemented() }
               }
+            }
           }
           EOF
-          
           cat > android/app/src/main/res/xml/accessibility_service_config.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
-              android:accessibilityEventTypes="typeAllMask"
-              android:accessibilityFlags="flagDefault|flagIncludeNotImportantViews|flagRetrieveInteractiveWindows"
+              android:accessibilityEventTypes="typeAllMasks"
+              android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows|flagIncludeNotImportantViews"
               android:accessibilityFeedbackType="feedbackGeneric"
               android:canRetrieveWindowContent="true"
-              android:description="@string/app_name"
+              android:description="SAKTI BOT V7"
               android:notificationTimeout="100" />
           EOF
-          
           cat > android/app/src/main/kotlin/com/example/sakti_bot_official/SaktiAccessibilityService.kt << 'EOF'
           package com.example.sakti_bot_official
           import android.accessibilityservice.AccessibilityService
           import android.view.accessibility.AccessibilityEvent
           import android.view.accessibility.AccessibilityNodeInfo
           class SaktiAccessibilityService : AccessibilityService() {
-              override fun onServiceConnected() { super.onServiceConnected() }
-              override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-                  val root = rootInActiveWindow ?: return
-                  autoClick(root, "TERIMA"); autoClick(root, "Terima"); autoClick(root, "ACCEPT"); autoClick(root, "Tarik"); autoClick(root, "Ambil")
-              }
-              private fun autoClick(node: AccessibilityNodeInfo, text: String) {
-                  try {
-                      val list = node.findAccessibilityNodeInfosByText(text)
-                      for (n in list) { var p: AccessibilityNodeInfo? = n; while(p != null){ if(p.isClickable){ p.performAction(AccessibilityNodeInfo.ACTION_CLICK); return }; p = p.parent } }
-                  } catch(e:Exception){}
-              }
-              override fun onInterrupt() {}
-          }
-          EOF
-          
-          echo "Injecting permissions..."
-          sed -i '/<uses-permission android:name="android.permission.INTERNET" \/>/a \    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />\n    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />' android/app/src/main/AndroidManifest.xml
-          sed -i '/<\/activity>/a \        <service android:name=".SaktiAccessibilityService" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" android:exported="true"><intent-filter><action android:name="android.accessibilityservice.AccessibilityService" \/><\/intent-filter><meta-data android:name="android.accessibilityservice" android:resource="@xml\/accessibility_service_config" \/><\/service>' android/app/src/main/AndroidManifest.xml
-          
-          cat android/app/src/main/AndroidManifest.xml
-      - name: Build APK
-        run: flutter build apk --release
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: SAKTI-BOT-OFFICIAL-APK-V7-FULL-AUTO-COLOK
-          path: build/app/outputs/flutter-apk/app-release.apk
+            override fun onServiceConnected() { super.onServiceConnected() }
+            override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+              val root = rootInActiveWindow ?: return
+              autoClick(root, "TERIMA")
+              autoClick(root, "TERIMA ORDER")
+            }
+            private fun autoClick(node: AccessibilityNodeInfo, text: String) {
+              try {
+                val list = node.findAccessibilityNodeInfosByText(text)
+                for (                       try { val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")); startActivity(intent); result.success(true) } catch
