@@ -7,17 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.3'
+          flutter-version: '3.22.2'
           channel: stable
-      - run: flutter create --platforms=android --org com.sakti.bot . --overwrite
+      - run: flutter pub get
       - run: flutter build apk --debug
       - uses: actions/upload-artifact@v4
         with:
-          name: sakti-bot-v6-real-13
+          name: sakti-bot-v6-real-26
           path: build/app/outputs/flutter-apk/app-debug.apk
