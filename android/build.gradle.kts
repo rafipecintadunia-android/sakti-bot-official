@@ -1,43 +1,21 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-// This file is auto generated.
-// To update all the settings.gradle files in the Flutter repo,
-// See dev/tools/bin/generate_gradle_lockfiles.dart.
-
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.layout.buildDirectory.value(
-    rootProject.layout.buildDirectory
-        .dir("../../build")
-        .get()
-)
-
-subprojects {
-    project.layout.buildDirectory.value(
-        rootProject.layout.buildDirectory
-            .dir(project.name)
-            .get()
-    )
-}
-subprojects {
-    project.evaluationDependsOn(":app")
-    dependencyLocking {
-        ignoredDependencies.add("io.flutter:*")
-        lockFile = file("${rootProject.projectDir}/project-${project.name}.lockfile")
-        var ignoreFile = file("${rootProject.projectDir}/.ignore-locking.md")
-        if (!ignoreFile.exists() && !project.hasProperty("local-engine-repo")) {
-            lockAllConfigurations()
+        repositories {
+                    google()
+                            mavenCentral()
         }
-    }
+}
+
+val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
+rootProject.layout.buildDirectory.value(newBuildDir)
+
+subprojects {
+        val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
+            project.layout.buildDirectory.value(newSubprojectBuildDir)
+}
+subprojects {
+        project.evaluationDependsOn(":app")
 }
 
 tasks.register<Delete>("clean") {
-    delete(rootProject.layout.buildDirectory)
+        delete(rootProject.layout.buildDirectory)
 }
