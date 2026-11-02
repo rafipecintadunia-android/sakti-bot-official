@@ -1,7 +1,7 @@
 name: sakti_bot
 description: SAKTI BOT V6 REAL FINAL
 publish_to: none
-version: 6.0.13+26
+version: 6.0.13+27
 environment:
   sdk: ">=3.0.0 <4.0.0"
 dependencies:
