@@ -19,5 +19,5 @@ jobs:
       - run: flutter build apk --debug
       - uses: actions/upload-artifact@v4
         with:
-          name: sakti-bot-apk
+          name: sakti-bot-v6-real-13
           path: build/app/outputs/flutter-apk/app-debug.apk

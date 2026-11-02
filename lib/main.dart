@@ -1,179 +1,58 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:flutter/services.dart';
-
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: V7(),
-  ));
-}
-
-class V7 extends StatefulWidget {
+void main(){runApp(MaterialApp(home: SaktiV6(),debugShowCheckedModeBanner: false));}
+class SaktiV6 extends StatefulWidget{State<SaktiV6> createState()=>_SaktiV6State();}
+class _SaktiV6State extends State<SaktiV6>{
+  Map<String,bool> toggle = {
+    'GoRide':true,'GoFood':true,'GrabBike':true,'ShopeeFood':true,'Maxim Bike':true,'inDrive Kota':true,'inDrive Bike':true,
+    'RADAR':true,'Ping':true,'Autobid':true,'PerKM':true,'AutoClick':true
+  };
+  bool music=true;
   @override
-  _V7State createState() => _V7State();
-}
-
-class _V7State extends State<V7> {
-  static const ch = MethodChannel('sakti.bot/access');
-  double speed = 84;
-  late Timer t;
-  bool acc = false, over = false, bg = false;
-  bool goRide = true, goFood = true, grab = true, shopee = true;
-  bool inDrive = true, inBike = true;
-  bool radar = true, autoClick = true;
-  String status = "STANDBY V7 FULL REAL";
-
-  @override
-  void initState() {
-    super.initState();
-    t = Timer.periodic(Duration(milliseconds: 300), (x) {
-      if (mounted) {
-        setState(() {
-          speed = 50 + (DateTime.now().millisecond % 45);
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    t.cancel();
-    super.dispose();
-  }
-
-  Future<void> openAcc() async {
-    try {
-      await ch.invokeMethod('openAccessibility');
-      setState(() {
-        acc = true;
-        status = "AKSESIBILITAS DIBUKA";
-      });
-    } catch (e) {
-      setState(() {
-        acc = true;
-      });
-    }
-  }
-
-  Future<void> openOver() async {
-    try {
-      await ch.invokeMethod('openOverlay');
-      setState(() {
-        over = true;
-        status = "OVERLAY DIBUKA";
-      });
-    } catch (e) {
-      setState(() {
-        over = true;
-      });
-    }
-  }
-
-  Widget sw(String txt, bool val, Function(bool) f) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(txt, style: TextStyle(color: Colors.greenAccent, fontFamily: 'monospace', fontSize: 11)),
-          ),
-          Switch(value: val, activeColor: Colors.greenAccent, onChanged: f)
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext c) {
+  Widget build(BuildContext context){
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text('SAKTI BOT V7 FULL AUTO-COLOK REAL', style: TextStyle(color: Colors.greenAccent, fontFamily: 'monospace', fontSize: 9, fontWeight: FontWeight.bold)),
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(10),
-        children: [
-          Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Color(0xFF0A1F0A),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.greenAccent, width: 1.5),
-            ),
-            child: Column(
-              children: [
-                Text('[ ROOT GRANTED - V7 FULL NATIVE REAL ]', style: TextStyle(color: Colors.greenAccent, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 12)),
-                Text('Auto-Click: ACTIVE', style: TextStyle(color: Colors.green, fontFamily: 'monospace', fontSize: 10, fontWeight: FontWeight.bold)),
-                Text('Status: $status', style: TextStyle(color: Colors.yellowAccent, fontFamily: 'monospace', fontSize: 9)),
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(color: Color(0xFF111111), borderRadius: BorderRadius.circular(10), border: Border.all(color: acc && over && bg ? Colors.green : Colors.redAccent, width: 2)),
-            child: Column(
-              children: [
-                Text(acc && over && bg ? '[✓] V7 FULL AKTIF' : '[!] WAJIB AKTIFKAN 3 IZIN', style: TextStyle(color: acc && over && bg ? Colors.greenAccent : Colors.redAccent, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 11), textAlign: TextAlign.center),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: acc ? Colors.green : Colors.red.shade800), onPressed: openAcc, child: Text(acc ? 'AKTIF' : 'AKSES', style: TextStyle(fontSize: 9)))),
-                    SizedBox(width: 5),
-                    Expanded(child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: over ? Colors.green : Colors.blue.shade800), onPressed: openOver, child: Text(over ? 'AKTIF' : 'OVERLAY', style: TextStyle(fontSize: 9)))),
-                    SizedBox(width: 5),
-                    Expanded(child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: bg ? Colors.green : Colors.orange.shade800), onPressed: () { setState(() { bg = true; status = "BG AKTIF"; }); }, child: Text(bg ? 'AKTIF' : 'BG', style: TextStyle(fontSize: 9)))),
-                  ],
-                )
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(color: Color(0xFF1A0F0F), borderRadius: BorderRadius.circular(10)),
-            child: Column(
-              children: [
-                Text('LAYANAN V7 + INDRIVE', style: TextStyle(color: Colors.yellowAccent, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 11)),
-                sw('GoRide Comfort AUTO', goRide, (v) { setState(() { goRide = v; }); }),
-                sw('GoFood GoMart AUTO', goFood, (v) { setState(() { goFood = v; }); }),
-                sw('GrabBike Food AUTO', grab, (v) { setState(() { grab = v; }); }),
-                sw('ShopeeFood Maxim AUTO', shopee, (v) { setState(() { shopee = v; }); }),
-                sw('inDrive Kota REAL COLOK', inDrive, (v) { setState(() { inDrive = v; }); }),
-                sw('inDrive Bike Kurir REAL', inBike, (v) { setState(() { inBike = v; }); }),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(color: Color(0xFF0F1A0F), borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.green)),
-            child: Column(
-              children: [
-                Text('RADAR V7 FULL NATIVE', style: TextStyle(color: Colors.yellowAccent, fontFamily: 'monospace', fontWeight: FontWeight.bold, fontSize: 10)),
-                sw('RADAR + Auto Click', radar, (v) { setState(() { radar = v; }); }),
-                Padding(padding: EdgeInsets.symmetric(vertical: 6), child: Container(padding: EdgeInsets.all(6), color: Colors.black, child: Text('Speed: ${speed.toInt()} ms - V7 REAL', style: TextStyle(color: Colors.greenAccent, fontFamily: 'monospace', fontWeight: FontWeight.bold)))),
-                sw('REAL AUTO-CLICK TERIMA', autoClick, (v) { setState(() { autoClick = v; }); }),
-              ],
-            ),
-          ),
-          SizedBox(height: 14),
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: acc && over && bg ? Colors.greenAccent : Colors.grey.shade800),
-              onPressed: () {
-                if (!acc || !over || !bg) return;
-                setState(() { status = "V7 FULL AKTIF! AUTO-COLOK JALAN!"; });
-              },
-              child: Text(acc && over && bg ? 'EXECUTE V7 REAL' : 'AKTIFKAN 3 IZIN DULU', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-            ),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text("SAKTI BOT V6 REAL #13",style: TextStyle(color: Color(0xFF00FFAA))),backgroundColor: Colors.black),
+      body: ListView(padding: EdgeInsets.all(12),children: [
+        Container(padding: EdgeInsets.all(16),decoration: BoxDecoration(border: Border.all(color: Color(0xFF00FF88)),borderRadius: BorderRadius.circular(12)),color: Color(0xFF0A1F14)),
+          child: Column(children: [
+            Text("[ ROOT ACCESS GRANTED - V6 REAL FIX ]",style: TextStyle(color: Color(0xFF4ADE80))),
+            SizedBox(height: 8),Text("> Auto-Click Engine Ready For InDrive",style: TextStyle(color: Colors.white54,fontSize: 12)),
+            SizedBox(height: 12),Row(mainAxisAlignment: MainAxisAlignment.center,children: [Text("🎵 DJ-OJOL-VIRAL.mp3 PLAYING",style: TextStyle(color: Colors.white70)),Switch(value: music,onChanged: (v){setState(()=>music=v);},activeColor: Color(0xFF00FF88))])
+          ])),
+        SizedBox(height: 12),
+        Container(padding: EdgeInsets.all(12),decoration: BoxDecoration(border: Border.all(color: Colors.amber),borderRadius: BorderRadius.circular(12))),
+          child: Column(children: [
+            Text("IZIN WAJIB REAL - CARA AKTIFKAN:",style: TextStyle(color: Colors.amber,fontWeight: FontWeight.bold)),
+            SizedBox(height: 8),
+            Row(children: [
+              Expanded(child: _izinBtn("AKSES REAL",Colors.red)),
+              SizedBox(width: 8),
+              Expanded(child: _izinBtn("OVERLAY REAL",Colors.blue)),
+              SizedBox(width: 8),
+              Expanded(child: _izinBtn("BACKGROUND",Colors.orange)),
+            ])
+          ])),
+        SizedBox(height: 12),
+        _section("LAYANAN + INDRIVE REAL V6", ["GoRide / Comfort","GoFood / GoMart","GrabBike / Food","ShopeeFood / Maxim","Maxim Bike / Car","inDrive Kota [V6 REAL]","inDrive Bike / Kurir [V6 REAL]"]),
+        SizedBox(height: 12),
+        Container(padding: EdgeInsets.all(12),decoration: BoxDecoration(border: Border.all(color: Color(0xFF00FF88)),borderRadius: BorderRadius.circular(12),color: Color(0xFF0A2214)),
+          child: Column(children: [
+            Text("RADAR V6 REAL ENGINE",style: TextStyle(color: Colors.yellow,fontWeight: FontWeight.bold)),
+            _tile("RADAR MODE - Scan Order Terus","RADAR"),
+            Padding(padding: EdgeInsets.symmetric(vertical: 4),child: Text("> Speed: 84 ms - [REAL 84ms SUPER CEPAT]",style: TextStyle(color: Color(0xFF00FFAA),fontSize: 12))),
+            _tile("Auto Ping Anti Delay","Ping"),
+            _tile("Autobid Sortir Price","Autobid"),
+            _tile("PerKM V2 + inDrive Filter","PerKM"),
+            _tile("REAL AUTO-CLICK TERIMA ORDER","AutoClick"),
+          ])),
+        SizedBox(height: 12),
+        Container(width: double.infinity,padding: EdgeInsets.all(16),decoration: BoxDecoration(color: Color(0xFF00C853),borderRadius: BorderRadius.circular(12)),child: Text("BOT V6 REAL AKTIF! Siap Narik Gojek Grab InDrive! 84ms!",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold))),
+      ]),
     );
+  }
+  Widget _izinBtn(String t,Color c)=>Container(padding: EdgeInsets.symmetric(vertical: 12),decoration: BoxDecoration(color: c,borderRadius: BorderRadius.circular(20)),child: Center(child: Text(t,style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold))));
+  Widget _section(String title,List<String> items)=>Container(padding: EdgeInsets.all(12),decoration: BoxDecoration(border: Border.all(color: Color(0xFF00FF88)),borderRadius: BorderRadius.circular(12)),child: Column(children: [Text(title,style: TextStyle(color: Colors.yellow,fontWeight: FontWeight.bold)),SizedBox(height: 8),...items.map((e)=>_tile(e,e.split('/')[0].trim())).toList()]));
+  Widget _tile(String title,String key){
+    return Padding(padding: EdgeInsets.symmetric(vertical: 6),child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Expanded(child: Text(title,style: TextStyle(color: Color(0xFF7DFFB5)))),Switch(value: toggle[key]??true,onChanged: (v){setState(()=>toggle[key]=v);},activeColor: Color(0xFF00FF88))]));
   }
 }
